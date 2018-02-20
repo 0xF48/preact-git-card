@@ -1,0 +1,331 @@
+@keyframes flickerAnimation {
+  0%   { opacity:0.1; }
+  50%  { opacity:0.05; }
+  100% { opacity:0.1; }
+}
+
+@trans: 0.4s ease;
+@dim: 40px;
+@light: #F8F8F8;
+@color: #7E7E7E;
+@color_dark: #545454;
+
+.-prc-releases{
+	border-left: 1px solid #f1f1f1;
+	box-sizing: content-box;
+	flex-flow: wrap;
+	.-prc-release{
+		padding: 10px;
+		width: 100%;
+	}
+
+	.-prc-release-pre{
+		color: #FD9D5F
+	}
+	.-prc-release-draft{
+		color: #FC545C
+	}
+	.-prc-release-recent{
+		color: #1AAD03
+	}
+}
+
+.-prc-release-date{
+	font-size: 11px !important;
+	// border-bottom: 1px solid #ececec;
+}
+.-prc-release-name{
+	font-weight: 600 !important;
+	line-height: 14px !important;
+	font-size: 16px !important;
+}
+
+.-prc-seperator{
+	color: #A8A8A8;
+	font-weight: 500;
+	margin: 0px 4px;
+}
+
+
+
+.-prc-header{
+	justify-content: flex-start;
+	*{
+		display: flex;
+    	align-items: center;
+    	line-height: 22px;
+	}
+	
+	.-prc-header-name{
+		padding: 0px 12px;
+		font-size: 18;
+	}
+	.-prc-header-name-repo{
+		font-weight: 600;
+		// font-size: 16;
+	}
+	// img{
+	// 	width: 20px !important;
+	// 	height: 20px !important;
+	// }
+}
+
+
+.-prc-overlay{
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 10;
+	background: #f8f8f8e3;
+	display: flex;
+	transition: opacity @trans; 
+	align-items: center;
+	justify-content: center;
+	
+	img{
+		all: unset;
+		animation: flickerAnimation 1s infinite;
+		opacity: 0.05;
+		width: 32px;
+		height: 32px;
+	}
+}
+
+.-prc-otrigger{
+	pointer-events: all;
+	cursor: pointer;
+	// background: #EAEAEA;
+}
+
+.-prc-wrapper{
+    font-size: 13px;
+    line-height: 15px;
+    width: 100%;
+    border-radius: 2px;
+    height: 100%;
+    box-sizing: border-box;
+    box-shadow: 0px 0px 2px #cccccc;
+    background: @light;
+    color: @color;
+	a{
+		all: unset;
+		cursor: pointer;
+		display: inline-block;
+		font-weight: 500;
+		color: #545454;
+		transition: border-color @trans, color @trans; 
+		border-bottom:1px solid rgba(0,0,0,0);
+    	padding-bottom:0px;
+    	// line-height: 18px;
+		&:hover{
+			// all: unset;
+			color: black;
+			border-bottom:1px solid rgba(0,0,0,.2);
+		}
+	}
+	.-prc-overlay-title-wrap{
+		display: flex;
+		flex-direction: column;
+		position: absolute;
+	    margin: 10px;
+	    right: 0px;
+	    top: 0px;
+	}
+	.-prc-overlay-title{
+	    font-weight: 600;
+	    color: @color_dark;
+	    font-size: 20px;
+	    line-height: 20px;
+	}
+	.-prc-overlay-title-alt{
+		font-size: 13px;
+		font-weight: 400;
+		align-self: flex-end;
+		/* opacity: 0.6; */
+		max-width: 100px;
+		line-height: 13px;
+	}
+
+}
+
+
+.-prc-btn{
+	cursor: pointer;
+	img{
+		fill: #7E7E7E;
+	}
+	color: @color;
+}
+
+.-prc-btn-lang{
+	padding: 0px 8px;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.-prc-stat{
+	max-height: 50px;
+	flex-grow: 1;
+	line-height: 17px;
+	flex-flow: column;
+	opacity: 0.7;
+	// line-height: 15px;
+	transition: opacity 0.3s ease;
+	&:hover{
+		opacity: 1;
+	}
+	// .-prc-stat-value{
+	// 	margin-left: 2px;
+	// }
+}
+
+.-prc-stats{
+	// opacity: 1;
+	// transition: opacity @trans; 
+	// svg{
+	// 	margin-bottom: 14px
+	// }
+
+}
+
+.-prc-issue-label{
+	font-size: 11px;
+	margin-right: 3px;
+	margin-bottom: 3px;
+	background: #ff6f00;
+	border-radius: 2px;
+	font-weight: 600;
+	display: inline-block;
+	color: white;
+	padding: 2px 6px;
+}
+
+
+.-prc-update{
+	justify-content: center;
+}
+.-prc-update-date{
+	padding: 0px 13px;
+	color: #7E7E7E;
+}
+
+
+
+
+.-prc-stats-scale-max{
+	position: absolute;
+	opacity: 0.6;
+	left: 5;
+	top: 0;
+	font-size: 11;
+}
+.-prc-stats-scale-min{
+	position: absolute;
+	opacity: 0.6;
+	font-size: 11;
+	left: 5;
+	bottom: 5;
+}
+.-prc-stats-scale-date{
+	position: absolute;
+	display: flex;
+	justify-content: center;
+	align-items: baseline;
+	line-height: 12px;
+	left: 0;
+	bottom: 0;
+	opacity: 0.6;
+	font-size: 11;
+	width: 100%;
+}
+
+
+.-prc-user-link{
+	all: unset !important;
+	cursor: pointer;
+    img{
+    	all: unset;
+		// box-shadow: 2px 2px 6px #0000001f;
+    	cursor: pointer;
+		width: 26px;
+		background: #FFFFFF;
+		height: 26px;
+		border-radius: 2px;
+		box-shadow: 2px 2px 4px #efefef;
+    }
+}
+
+.-prc-lang-circle{
+	width: 10px;
+	height: 10px;
+	flex-shrink: 0;
+	border-radius: 50%;
+	margin: 0px 4px;
+	// box-shadow: 2px 2px 6px #0000001f;
+}
+
+.-prc-hidden{
+	pointer-events: none;
+	opacity: 0;
+}
+
+.-prc-contributor{
+	padding: 10px;
+	align-items: center;
+	.-prc-user-contrib{
+		margin-left: 10px;
+		color: #656565;
+		font-weight: 600;
+	}
+}
+
+
+.-prc-commit{
+	padding: 0px 5px;
+	.-prc-commit-date{
+		align-items: center;
+		img{
+			opacity: 0.7
+		}
+	}
+	.-prc-commit-body{
+		display: flex;
+		align-items: center;
+	}
+	*{
+		margin: 0px 3px;
+	}
+	.-prc-commit-id{
+		font-weight: 600;
+		margin: 0px 3px;
+		// line-height: 14px;
+	}
+
+	.-prc-commit-status{
+		cursor: pointer;
+		width: 16px;
+		height: 16px;
+		background: #efefef;
+		&:hover{
+			background: #E5E5E5;
+		}
+		padding: 2px;
+		border-radius: 2px;
+		margin: 1px;
+	}
+	.-prc-commit-by{
+		opacity: 0.6;
+		// font-weight: 600;
+		// opacity: 0.3
+	}
+	.-prc-commit-author{
+		width: 16px;
+		height: 16px;
+		border-radius: 50%;
+	}
+}
+
+
+

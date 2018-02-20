@@ -1,0 +1,48 @@
+{
+  "name": "preact-repo-card",
+  "version": "1.0.0",
+  "description": "github repository card for your blog or portfolio site using preact.",
+  "main": "webpack.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config lib.config.js && minify index.js > index.min.js",
+    "dev": "webpack-dev-server"
+  },
+  "author": "arxii",
+  "license": "ISC",
+  "devDependencies": {
+    "await-fs": "^1.0.0",
+    "coffee-loader": "^0.9.0",
+    "coffeescript": "^2.1.1",
+    "css-loader": "^0.28.9",
+    "express": "^4.16.2",
+    "file-loader": "^1.1.6",
+    "glsl-template-loader": "^1.1.0",
+    "less": "^2.7.3",
+    "less-loader": "^4.0.5",
+    "lodash": "^4.17.4",
+    "preact-markdown": "^0.4.0",
+    "preact-markup": "^1.6.0",
+    "puppeteer": "^1.0.0",
+    "random-color": "^1.0.1",
+    "raw-loader": "^0.5.1",
+    "seed-random": "^2.2.0",
+    "style-loader": "^0.19.1",
+    "tape": "^4.8.0",
+    "url-loader": "^0.6.2",
+    "webpack": "^3.10.0",
+    "shader-box-gradient": "^1.0.1"
+  },
+  "dependencies": {
+    "d3": "^4.13.0",
+    "d3-interpolate": "^1.1.6",
+    "d3-scale": "^2.0.0",
+    "fecha": "^2.3.2",
+    "graphql-request": "^1.4.1",
+    "preact-slide": "^0.1.7",
+    "request-promise": "^4.2.2"
+  },
+  "peerDependencies": {
+    "preact": "^8.2.7"
+  }
+}

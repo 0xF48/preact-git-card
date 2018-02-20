@@ -1,0 +1,3 @@
+site/**.* binary
+index.min.js binary
+index.js binary
