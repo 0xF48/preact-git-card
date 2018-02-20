@@ -25,7 +25,7 @@ var cfg = {
 	},
 	// externals: nodeModules,
 	output: {
-		filename: "index.js",
+		filename: "build/index.js",
 		library: 'PreactRepoCard',
 		libraryTarget: 'umd'
 	}

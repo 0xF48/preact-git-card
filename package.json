@@ -1,11 +1,11 @@
 {
   "name": "preact-repo-card",
   "version": "1.0.0",
-  "description": "github repository card for your blog or portfolio site using preact.",
-  "main": "webpack.config.js",
+  "description": "a cool github repository card for your blog or portfolio site.",
+  "main": "build/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --config lib.config.js && minify index.js > index.min.js",
+    "build": "webpack --config lib.config.js && minify -o build/index.min.js build/index.js",
     "dev": "webpack-dev-server"
   },
   "author": "arxii",
@@ -39,7 +39,7 @@
     "d3-scale": "^2.0.0",
     "fecha": "^2.3.2",
     "graphql-request": "^1.4.1",
-    "preact-slide": "^0.1.7",
+    "preact-slide": "^0.1.7-c",
     "request-promise": "^4.2.2"
   },
   "peerDependencies": {

@@ -27,6 +27,14 @@ module.exports = class Example
 					height: 130
 					margin: '10px'
 				h GitCard,
+					user: "arxii"
+					repo: "preact-slide"
+			h 'div',
+				style:
+					width: 320
+					height: 130
+					margin: '10px'
+				h GitCard,
 					user: "developit"
 					repo: "preact"
 			# h 'div',

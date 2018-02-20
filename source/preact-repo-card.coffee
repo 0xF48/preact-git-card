@@ -10,7 +10,6 @@ I_EYE = require './i_eye.svg'
 I_STAR = require './i_star.svg'
 I_LABEL = require './i_tag.svg'
 I_PEOPLE = require './i_ppl.svg'
-I_COURT = require './i_court.svg'
 I_ERROR = require './i_error.svg'
 I_PULL = require './i_pull.svg'
 I_CHECK = require './i_check.svg'
@@ -19,7 +18,7 @@ I_COMMIT = require './i_commit.svg'
 I_CLOCK = require './i_clock.svg'
 
 # please dont use this, thnx.
-PUBLIC_ = ['6154eb17ae86d63fadce5dd49a68b289b1acca90','13969e4e189b5c0645c35e951a7afb6420494884']
+PUBLIC_ = ['aa183017db17617630dab01be33595701e4ffdbc']
 
 d3 = require './d3'
 DIM = 40
@@ -41,80 +40,6 @@ shuffle = (arr)->
 		else if map[a] < map[b] then return 1
 		return 0
 
-class Graph extends Component
-	constructor: (props)->
-		super()
-		@state = 
-			data: props.stats.all
-			empty: Array(52).fill(0)
-			path: null
-			show: false
-			start_path: null
- 
-		@line = d3.line()
-		.x (d,i)=>
-			@scaleX(i)
-		.y (d,i)=>
-			@scaleY(d)
-		.curve(d3.curveMonotoneX)
-
-
-	scaleX: (x)->
-		@_el.clientWidth / 52 * x
-	scaleY: (y)->
-		(DIM-7) - ((DIM-7) / @props.stats.max * y)
-		
-
-	componentDidMount: ->
-		@setState
-			show: true
-			path: @line(@state.data)
-			start_path: @line(@state.empty)
-
-	render: ->
-		h Slide,
-			# dim: DIM
-			center: yes
-			className: '-prc-stats'
-		
-			
-			h 'div',
-				className: '-prc-stats-scale-max'
-				@props.stats.max
-			h 'div',
-				className: '-prc-stats-scale-min'
-				0
-			h 'div',
-				className: '-prc-stats-scale-date'
-				fecha.format(new Date(Date.now()-31449600000),'mediumDate')+' -  Today'
-
-			h 'svg',
-				ref: (el)=>
-					@_el = el
-				stroke:"#AEAEAE"
-				style:
-					'margin-left': 13
-				"stroke-width":2
-				fill:"none"
-				height:"100%"
-				# viewBox:"0 0 #{DIM*2} "+@_el
-				width:"90%"
-				xmlns:"http://www.w3.org/2000/svg"
-				h 'path',
-					id: @props.name
-					d: @state.path
-				h 'animate',
-					'xlink:href':'#'+@props.name
-					attributeName: 'd'
-					attributeType: 'XML'
-					from: @state.start_path
-					to: @state.path
-					# fill: 'freeze'
-					dur: '0.5s'
-					keyTimes: '0;1'
-					keySplines:"0.25, 0.35, 0, 1"
-					calcMode:"spline"
-					# repeatCount:"indefinite"
 					
 
 
@@ -126,7 +51,7 @@ fetchGithubRepoV3 = (user,repo)->
 
 		opt = 
 			headers:
-				'authorization': 'bearer '+PUBLIC_[0]
+				'Authorization': 'bearer '+PUBLIC_[0]
 		
 		res = await Promise.all([
 			fetch pre+'/stats/participation',opt
@@ -371,6 +296,13 @@ fetchGithubRepoV4 = (user,repo,branch)->
 			data.commits = data.ref.target.history.edges.map (n)->
 				n.node
 
+			for commit in data.commits
+				if commit.status && commit.status.contexts.length
+					for ctx in commit.status.contexts
+						ctx.description_h = h 'div',
+							className: '-prc-overlay-data'
+							ctx.description 
+
 			delete data.ref
 			
 			data.releases_count = data.releases.totalCount
@@ -399,6 +331,94 @@ fetchGithubRepoV4 = (user,repo,branch)->
 
 
 
+
+
+class Graph extends Component
+	constructor: (props)->
+		super()
+		@state = 
+			data: props.stats.all
+			empty: Array(52).fill(0)
+			path: null
+			show: false
+			start_path: null
+ 
+		@line = d3.line()
+		.x (d,i)=>
+			@scaleX(i)
+		.y (d,i)=>
+			@scaleY(d)
+		.curve(d3.curveMonotoneX)
+
+
+	scaleX: (x)->
+		@_el.clientWidth / 52 * x
+	scaleY: (y)->
+		(DIM-7) - ((DIM-7) / @props.stats.max * y)
+	
+	onMouseEnter: =>
+		@setState
+			hover: true
+	
+	onMouseLeave: =>
+		@setState
+			hover: false
+
+	componentDidMount: ->
+		@setState
+			show: true
+			path: @line(@state.data)
+			start_path: @line(@state.empty)
+
+	render: ->
+		h Slide,
+			# dim: DIM
+			center: yes
+			className: '-prc-stats'
+			onClick: @props.showCommits
+			onMouseEnter: @onMouseEnter
+			onMouseLeave: @onMouseLeave
+			
+			
+			h 'div',
+				className: '-prc-stats-scale-max'
+				@props.stats.max
+			h 'div',
+				className: '-prc-stats-scale-min'
+				0
+			h 'div',
+				className: '-prc-stats-scale-date'
+				fecha.format(new Date(Date.now()-31449600000),'mediumDate')+' -  Today'
+
+			h 'svg',
+				# className: '-prc-stats-svg'
+				ref: (el)=>
+					@_el = el
+				stroke:"#7E7E7E"
+				style:
+					'opacity': @state.hover && 1 || 0.6
+					'margin-left': 13
+				"stroke-width":2
+				fill:"none"
+				height:"100%"
+				# viewBox:"0 0 #{DIM*2} "+@_el
+				width:"90%"
+				xmlns:"http://www.w3.org/2000/svg"
+				h 'path',
+					id: @props.name
+					d: @state.path
+				h 'animate',
+					'xlink:href':'#'+@props.name
+					attributeName: 'd'
+					attributeType: 'XML'
+					from: @state.start_path
+					to: @state.path
+					# fill: 'freeze'
+					dur: '0.5s'
+					keyTimes: '0;1'
+					keySplines:"0.25, 0.35, 0, 1"
+					calcMode:"spline"
+					# repeatCount:"indefinite"
 
 
 
@@ -580,6 +600,8 @@ class Commit
 		
 		h Slide,
 			className: '-prc-commit'
+			height: DIM
+			width: '100%'
 			vert: yes
 			h Slide,
 				className: '-prc-commit-body'
@@ -611,76 +633,86 @@ class RepoContent extends Component
 		@state = 
 			show_right: no
 			right_bar: null
-			right_bar_alt: null
+			overlay_text: null
 		
 	showContent: =>
 		@setState
 			show_right: false
 
+		
+	hideBottom: =>
+		@setState
+			show_bottom: false
+
 	showReleases: =>
 		@setState
 			show_right: !@state.show_right
 			right_bar: 'releases'
-			right_bar_alt: null
+			overlay_text: null
 	showIssues: =>
 		@setState
 			show_right: !@state.show_right
 			right_bar: 'issues'
-			right_bar_alt: null
-	
+			overlay_text: null
+	showCommits: =>
+		@setState
+			show_right: !@state.show_right
+			right_bar: 'commits'
+			overlay_text: null
 	showStargazers: =>
 		@setState
 			show_right: !@state.show_right
 			right_bar: 'stargazers'
-			right_bar_alt: null
+			overlay_text: null
 	
 	showForks: =>
 		@setState
 			show_right: !@state.show_right
 			right_bar: 'forks'
-			right_bar_alt: null
+			overlay_text: null
 
 	showContributors: =>
 		@setState
 			show_right: !@state.show_right
 			right_bar: 'contributors'
-			right_bar_alt: null
+			overlay_text: null
 
 	showCommitStatus: (commit)=>
-		
+		# dat = null
 		bottom_slide_data = h 'div',
-			className: '-prc-overlay-cstatus'
-			commit.status.contexts.map (ctx)->
+			className: '-prc-cstatus'
+			commit.status.contexts.map (ctx)=>
 				url = new URL(ctx.targetUrl)
-				h 'img',
-					src: ctx.state == 'SUCCESS' && I_CHECK || I_CLOSE
-				h 'a',
-					href: ctx.targetUrl
-					url.hostname
 				h 'div',
-					className: '-prc-overlay-cstatus-desc'
-					ctx.description
+					onMouseEnter: ()=>
+						@setState
+							bottom_overlay_data: ctx.description_h
+					className: '-prc-cstatus-status'
+					h 'img',
+						src: ctx.state == 'SUCCESS' && I_CHECK || I_CLOSE
+					h 'a',
+						href: ctx.targetUrl
+						url.hostname
 		@setState
+			show_bottom: true
+			bottom_overlay_data: null
 			bottom_slide_data: bottom_slide_data
+
 
 	onUserHover: (user)=>
 		@setState
-			right_bar_alt: '/'+user.login 
+			overlay_text: '/'+user.login 
 	
 	onIssueHover: (issue)=>
 		@setState
-			right_bar_alt: issue.title.substr(0,50)+'...'
+			overlay_text: issue.title.substr(0,50)+'...'
 
 	render: ->
 		header = h Slide,
 			className: '-prc-header'
 			dim: DIM
-			# h Btn,
-			# 	active: false
-			# 	h 'img',src:I_MENU
 			h Slide,
 				ratio: 2.5
-				# center: yes
 				className: '-prc-btn -prc-btn-lang'
 				onClick: @showLanguages
 				h 'div',
@@ -692,7 +724,6 @@ class RepoContent extends Component
 					@props.primaryLanguage.name
 			h Slide,
 				className: '-prc-header-name'
-				# center: yes
 				h User, @props.owner
 				h 'a',
 					href: @props.owner.url
@@ -730,6 +761,12 @@ class RepoContent extends Component
 				issue.onHover = @onIssueHover
 				h Issue, issue
 			right_beta = 50
+		else if @state.right_bar == 'commits'
+			right_bar = @props.commits.map (commit)=>
+				commit.showCommitStatus = @showCommitStatus
+				h Commit,commit
+			right_beta = 50
+
 
 	
 		if @props.commits[0]
@@ -737,27 +774,29 @@ class RepoContent extends Component
 				@showCommitStatus(commit)
 
 
+			
+			
+
 		content = h Slide,
 			vert: no
 			beta: 100
-			offset: DIM
 			className: '-prc-content'
 			slide: yes
 			pos: @state.show_right && 1 || 0
 			h Slide,
 				vert: yes
 				h 'div',
-					className: '-prc-overlay -prc-otrigger '+(!@state.show_right && !@state.bottom_slide_data && '-prc-hidden' || '')
+					className: '-prc-overlay -prc-otrigger '+(!@state.show_right && '-prc-hidden' || '')
 					onClick: @showContent
-					@state.overlay_data || h 'div',
+					h 'div',
 						className: '-prc-overlay-title-wrap'
 						h 'a',
 							className: '-prc-overlay-title'
 							href: @props.url+'/'+@state.right_bar
 							@state.right_bar
-						@state.right_bar_alt && h 'span',
+						@state.overlay_text && h 'span',
 							className: '-prc-overlay-title-alt'
-							@state.right_bar_alt
+							@state.overlay_text
 				h LangBar,@props
 				h Slide,
 					dim: DIM
@@ -787,7 +826,9 @@ class RepoContent extends Component
 						value: @props.license.spdx_id
 				h Slide,
 					className: 'stats'
-					h Graph,@props	
+					h Graph,Object.assign 
+						showCommits: @showCommits
+					,@props
 					@props.commits[0] && h Commit,@props.commits[0]
 
 
@@ -804,14 +845,22 @@ class RepoContent extends Component
 		h Slide,
 			vert: yes
 			slide: yes
-			header
-			content
+			pos: @state.show_bottom && 1 || 0
 			h Slide,
-				beta: 50
+				beta: 100
 				vert: yes
+				header
+				content
+				h 'div',
+					onClick: @hideBottom
+					className: '-prc-overlay -prc-otrigger '+(!@state.show_bottom && '-prc-hidden' || '')
+					@state.bottom_overlay_data
+			h Slide,
 				className: '-prc-bottom'
+				vert: yes
+				beta: 100
+				offset: -DIM
 				@state.bottom_slide_data
-
 
 
 class PreactRepoCard extends Component
@@ -835,7 +884,12 @@ class PreactRepoCard extends Component
 			className: '-prc-wrapper'
 			h 'div',
 				className: ('-prc-overlay '+(@state.repo && '-prc-hidden' || ''))
-				h 'img',src: I_GITHUB
+				h 'img',
+					className: '-prc-git-api-logo'
+					src: I_GITHUB
+				h 'img',
+					className: '-prc-center-logo'
+					src: I_CHART
 			@state.repo && h RepoContent,@state.repo
 
 

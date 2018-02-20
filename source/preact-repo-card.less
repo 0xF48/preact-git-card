@@ -83,13 +83,24 @@
 	transition: opacity @trans; 
 	align-items: center;
 	justify-content: center;
+	.img{
+		all:unset;
+	}
 	
-	img{
-		all: unset;
+	.-prc-git-api-logo{
 		animation: flickerAnimation 1s infinite;
 		opacity: 0.05;
-		width: 32px;
-		height: 32px;
+		width: 20px;
+		height: 20px;
+		position: absolute;
+		left: 10px;
+		top: 10px;
+	}
+	.-prc-center-logo{
+		animation: flickerAnimation 1s infinite;
+		opacity: 0.05;
+		width: 30px;
+		height: 30px;
 	}
 }
 
@@ -102,9 +113,9 @@
 .-prc-wrapper{
     font-size: 13px;
     line-height: 15px;
-    width: 100%;
+    // width: 100%;
     border-radius: 2px;
-    height: 100%;
+    // height: 100%;
     box-sizing: border-box;
     box-shadow: 0px 0px 2px #cccccc;
     background: @light;
@@ -147,7 +158,14 @@
 		max-width: 100px;
 		line-height: 13px;
 	}
+}
 
+
+.-prc-overlay-data{
+	position: absolute;
+	left: 5px;
+	bottom: 0px;
+	width: 100%;
 }
 
 
@@ -182,12 +200,31 @@
 }
 
 .-prc-stats{
+	cursor: pointer;
+	svg{
+		transition: opacity @trans;
+	}
 	// opacity: 1;
 	// transition: opacity @trans; 
 	// svg{
 	// 	margin-bottom: 14px
 	// }
+}
 
+.-prc-bottom{
+	padding: 10px;
+	// background: @color_dark;
+	// color: #CDCDCD;
+	// font-family: monospace;
+	// font-size: 11;
+}
+
+.-prc-cstatus{
+
+	img{
+		width: 11px;
+   		margin: 0px 10px;
+	}
 }
 
 .-prc-issue-label{
@@ -284,6 +321,7 @@
 
 .-prc-commit{
 	padding: 0px 5px;
+	margin-bottom: 10px;
 	.-prc-commit-date{
 		align-items: center;
 		img{
